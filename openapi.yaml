@@ -4,20 +4,6 @@ info:
   description: |-
     This document is a guide which will walk you through SnowMirror REST API. 
     The purpose of the REST API is to allow developers to integrate SnowMirror with other applications.
-
-    __Manage Synchonization__
-
-    * Create a synchronization
-    * Update a synchronization
-    * Remove a synchronization
-    * Export a synchronization
-    * Import a synchronization
-
-    The following resource collections are offered by this API:
-    * Synchonization
-    * SynchronizationAction
-    * SynchronizationExport
-    * SynchronizationImport
   contact:
     name: ' GuideVision'
     url: 'https://www.snow-mirror.com/doc/RestApiGuide.html'
@@ -108,7 +94,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSynchronizationUpdate'
+              $ref: '#/components/schemas/CreateSynchronizationInput'
         required: true
       responses:
         '200':
@@ -148,9 +134,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Action'
+                type: object
+                properties:
+                  actions:
+                    type: array
+                    items:
+                      type: string
                 x-examples:
                   Example 1:
                     actions:
@@ -159,31 +148,6 @@ paths:
                       - STOP
       operationId: getSynchronizationAction
       description: Returns a list of all actions which can be performed on synchronizations.
-    post:
-      summary: Create Synchronization actions
-      description:  |-
-        Performs an action on the selected synchronizations.
-        API ignores synchronizations which are already running. It also ignores synchronizations which are deactivated.
-        Available actions are "SYNCHRONIZE", "CLEAN_AND_SYNCHRONIZE", "DIFFERENTIAL_SYNCHRONIZATION", "STOP"
-      tags:
-        - Synchronization
-      x-speakeasy-entity-operation: Synchronization#create
-      operationId: createSynchronizationAction
-      requestBody:
-        description: A JSON representation of the synchronization to create
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSynchronizationActionInput'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Synchronization'
-          description: OK
-
   /api/v1/synchronization/export:
     get:
       summary: Exports all synchronizations and their settings.
@@ -254,9 +218,6 @@ components:
       x-speakeasy-entity: Synchronization
       type: object
       properties:
-        id:
-          type: integer
-          description: Id of the synchronization.
         name:
           type: string
           description: Display name of the synchronization.
@@ -295,13 +256,13 @@ components:
           type: string
           description: Defines how to synchronize reference field types.
         autoSchemaUpdate:
-          type: string
+          type: boolean
           description: |
                 Configures how to check for schema changes in ServiceNow.
 
                 Enabled (true) - whenever a synchronization is executed, SnowMirror checks for schema changes in ServiceNow. Automatically adds, updates (data type, max. length of a column) and removes columns. If a new column is added SnowMirror clears the mirror table and downloads all records from scratch.
                 Enabled (no truncation) (ENABLED_WITHOUT_TRUNCATION) - the same as Enabled option. It handles new columns differently, though. If a new column is added SnowMirror does not clear the mirror table. Instead, it creates the column and populates it with a default value (which is defined in ServiceNow).
-          example: "true"
+          example: true                
         encodedQuery:
           type: string
           example: ''
@@ -312,6 +273,7 @@ components:
             - TRUNCATE
             - DIFF
             - NONE
+          example: AUDIT          
         active:
           type: boolean
           description: |-
@@ -320,7 +282,7 @@ components:
           example: true                
         runImmediately:
           type: boolean
-          description: Determines whether initial synchronization should be done
+          description: Determines whether initial synchronization should be done          
           example: false
         scheduler:
           type: object
@@ -337,172 +299,7 @@ components:
               example: MANUALLY              
             beginDate:
               type: string
-              example: '2023-08-11'
-            time:
-              type: string
-              example: "02:00"
-            visible:
-              type: boolean
-            incLoadExecutionType:
-              type: string  
-            days: 
-              type: array
-              items:
-                type: string
-                enum: 
-                  - MONDAY
-                  - TUESDAY
-                  - WEDNESDA
-                  - THURSDAY
-                  - FRIDAY
-                  - SATURDAY
-                  - SUNDAY
-        fullLoadScheduler:
-          type: object
-          properties:
-            executionType:
-              type: string
-              enum:
-                - CLEAN_AND_SYNCHRONIZE
-                - DIFFERENTIAL.
-              example: CLEAN_AND_SYNCHRONIZE
-            type:
-              type: string
-              enum:
-                - MANUALLY
-                - DAILY
-                - WEEKLY
-                - PERIODICALLY
-                - CRON
-              example: MANUALLY
-            beginDate:
-              type: string
               example: '2014-08-07'
-        schedulerPriority:
-          type: string
-          enum:
-            - HIGHEST
-            - HIGH
-            - NORMAL
-            - LOW
-            - LOWEST
-          example: HIGH
-          retentionPeriod:
-            type: integer
-            description: How many days to keep backups
-          format:
-            type: string
-            description: How to store backups. "CSV" - comma separated file. "XML" - XML files. 
-            enum:
-              - CSV
-              - XML
-      required:
-        - name
-    CreateSynchronizationSyncUpdate:
-      x-speakeasy-entity: Synchronization
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Id of the synchronization.
-        name:
-          type: string
-          description: Display name of the synchronization.
-          example: incident
-        table:
-          type: string
-          description: Name of the table in ServiceNow.
-          example: incident
-        view:
-          type: string
-          description: Name of the view in ServiceNow.
-        mirrorTable:
-          type: string
-          description: Name of the table in mirror database where the data will be migrated.
-          example: incident
-        columns:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: sys_id
-        columnsToExclude:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: sys_created_by
-        allowInheritedColumns:
-          type: boolean
-          description: 'SnowMirror checks if columns exist in ServiceNow. If this flag is set to true,'
-        referenceFieldType:
-          type: string
-          description: Defines how to synchronize reference field types.
-        autoSchemaUpdate:
-          type: string
-          description: |
-                Configures how to check for schema changes in ServiceNow.
-
-                Enabled (true) - whenever a synchronization is executed, SnowMirror checks for schema changes in ServiceNow. Automatically adds, updates (data type, max. length of a column) and removes columns. If a new column is added SnowMirror clears the mirror table and downloads all records from scratch.
-                Enabled (no truncation) (ENABLED_WITHOUT_TRUNCATION) - the same as Enabled option. It handles new columns differently, though. If a new column is added SnowMirror does not clear the mirror table. Instead, it creates the column and populates it with a default value (which is defined in ServiceNow).
-          example: "true"
-        encodedQuery:
-          type: string
-          example: ''
-        deleteStrategy:
-          type: string
-          enum:
-            - AUDIT
-            - TRUNCATE
-            - DIFF
-            - NONE
-          example: AUDIT          
-        active:
-          type: boolean
-          description: |-
-                true - synchronization is active and can be scheduled to synchronize data from ServiceNow
-                false - synchronization is deactivated and cannot be scheduled to synchronize data from ServiceNowNow          
-          example: true                
-        scheduler:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Specifies when the incremental load synchronization will run
-              enum:
-                - MANUALLY
-                - DAILY
-                - WEEKLY
-                - PERIODICALLY
-                - CRON
-              example: MANUALLY              
-            beginDate:
-              type: string
-              example: '2014-08-07'
-            time:
-              type: string
-              example: "02:00"
-            visible:
-              type: boolean
-            incLoadExecutionType:
-              type: string  
-            days: 
-              type: array
-              items:
-                type: string
-                enum: 
-                  - MONDAY
-                  - TUESDAY
-                  - WEDNESDA
-                  - THURSDAY
-                  - FRIDAY
-                  - SATURDAY
-                  - SUNDAY
-
         fullLoadScheduler:
           type: object
           properties:
@@ -533,15 +330,9 @@ components:
             - LOW
             - LOWEST
           example: NORMAL
-          retentionPeriod:
-            type: integer
-            description: How many days to keep backups
-          format:
-            type: string
-            description: How to store backups. "CSV" - comma separated file. "XML" - XML files. 
-            enum:
-              - CSV
-              - XML
+      required:
+        - name
+        - mirrorTable
     CreateSynchronizationInput:
       description: An input object to creating a Synchronization
       type: object
@@ -550,187 +341,32 @@ components:
           $ref: '#/components/schemas/CreateSynchronizationSyncInput'
       x-stoplight:
         id: d04afae9c8b4d
-    CreateSynchronizationUpdate:
-      description: An input object to updating a Synchronization
-      type: object
-      properties:
-        sync:
-          $ref: '#/components/schemas/CreateSynchronizationSyncUpdate'
     SyncronizationSyncOutput:
       type: object
       x-speakeasy-entity: Synchronization
       properties:
-        id:
-          type: integer
-          description: Id of the synchronization.
         name:
           type: string
           description: Display name of the synchronization.
-          example: incident
         table:
           type: string
           description: Name of the table in ServiceNow.
-          example: incident
-        view:
-          type: string
-          description: Name of the view in ServiceNow.
-        mirrorTable:
-          type: string
-          description: Name of the table in mirror database where the data will be migrated.
-          example: incident
-        columns:
-          x-speakeasy-ignore: true
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: sys_id
-              sys_id:
-                type: string
-        columnsToExclude:
-          x-speakeasy-ignore: true
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: sys_created_by
-              sys_id:
-                type: string
-        allowInheritedColumns:
-          type: boolean
-          description: SnowMirror checks if columns exist in ServiceNow. If this flag is set to true
-        autoSchemaUpdate:
-          type: string
-          description: |
-                Configures how to check for schema changes in ServiceNow.
-
-                Enabled (true) - whenever a synchronization is executed, SnowMirror checks for schema changes in ServiceNow. Automatically adds, updates (data type, max. length of a column) and removes columns. If a new column is added SnowMirror clears the mirror table and downloads all records from scratch.
-                Enabled (no truncation) (ENABLED_WITHOUT_TRUNCATION) - the same as Enabled option. It handles new columns differently, though. If a new column is added SnowMirror does not clear the mirror table. Instead, it creates the column and populates it with a default value (which is defined in ServiceNow).
-          example: "true"
-        referenceFieldType:
-          type: string
-          description: Defines how to synchronize reference field types.
-        encodedQuery:
-          type: string
-          example: ''
-        deleteStrategy:
-          type: string
-          enum:
-            - AUDIT
-            - TRUNCATE
-            - DIFF
-            - NONE
-          example: AUDIT          
-        active:
-          type: boolean
-          description: |-
-                true - synchronization is active and can be scheduled to synchronize data from ServiceNow
-                false - synchronization is deactivated and cannot be scheduled to synchronize data from ServiceNowNow          
-          example: true                
-        scheduler:
-          type: object
-          properties:
-            type:
-              type: string
-              description: Specifies when the incremental load synchronization will run
-              enum:
-                - MANUALLY
-                - DAILY
-                - WEEKLY
-                - PERIODICALLY
-                - CRON
-              example: MANUALLY              
-            beginDate:
-              type: string
-              example: '2014-08-07'
-            time:
-              type: string
-            visible:
-              type: boolean
-            incLoadExecutionType:
-              type: string
-        fullLoadScheduler:
-          type: object
-          properties:
-            executionType:
-              type: string
-              enum:
-                - CLEAN_AND_SYNCHRONIZE
-                - DIFFERENTIAL.
-              example: CLEAN_AND_SYNCHRONIZE
-            type:
-              type: string
-              enum:
-                - MANUALLY
-                - DAILY
-                - WEEKLY
-                - PERIODICALLY
-                - CRON
-              example: MANUALLY
-            beginDate:
-              type: string
-              example: '2014-08-07'
-            time:
-              type: string
-            visible:
-              type: boolean
-        schedulerPriority:
-          type: string
-          enum:
-            - HIGHEST
-            - HIGH
-            - NORMAL
-            - LOW
-            - LOWEST
-          example: NORMAL
-        synchronizationType:
-          type: string
-        masterTable:
-          type: string
-        attachmentDirectory:
-          type: string  
-        retentionPeriod:
+        id:
           type: integer
-          description: How many days to keep backups
-        format:
-          type: string
-          description: How to store backups. "CSV" - comma separated file. "XML" - XML files. 
-          enum:
-            - CSV
-            - XML
-        updateBeforeSynchronizationRun:
-          type: string  
+          description: Sync ID
+      required:
+        - id
+        - name
     Synchronization:
       description: A Synchonization object
       type: object
       properties:
         sync:
           $ref: '#/components/schemas/SyncronizationSyncOutput'
+      required:
+        - sync
       x-stoplight:
         id: b02cbc78ee913
-    Action:
-      description: An input object to creating a SynchronizationAction
-      type: object
-      properties:
-        action:
-          type: string
-          enum:
-            - SYNCHRONIZE
-            - CLEAN_AND_SYNCHRONIZE
-            - DIFFERENTIAL_SYNCHRONIZATION
-            - STOP
-    CreateSynchronizationActionInput:
-      description: An input object to creating a SynchronizationAction
-      type: object
-      properties:
-        $ref: '#/components/schemas/Action'
-        ids: array
-        items:
-          type: integer
   securitySchemes:
     basic-authentication:
       type: http
