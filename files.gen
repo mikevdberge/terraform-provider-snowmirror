@@ -1,6 +1,7 @@
 internal/sdk/setting.go
 internal/sdk/synchronization.go
 internal/sdk/sdk.go
+internal/provider/type_syncronization_sync_output.go
 internal/provider/type_create_synchronization_sync_input_columns.go
 internal/provider/type_create_synchronization_sync_input_full_load_scheduler.go
 internal/provider/type_create_synchronization_sync_input_scheduler.go
@@ -69,6 +70,9 @@ internal/sdk/pkg/models/shared/security.go
 USAGE.md
 internal/provider/provider.go
 examples/provider/provider.tf
+internal/provider/setting_resource.go
+internal/provider/setting_resource_sdk.go
+examples/resources/snowmirror_setting/resource.tf
 internal/provider/synchronization_resource.go
 internal/provider/synchronization_resource_sdk.go
 examples/resources/snowmirror_synchronization/resource.tf

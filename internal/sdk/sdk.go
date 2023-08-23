@@ -123,7 +123,7 @@ func New(opts ...SDKOption) *Snowmirror {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "terraform",
 			OpenAPIDocVersion: "5.1.13",
-			SDKVersion:        "0.1.1",
+			SDKVersion:        "0.1.2",
 			GenVersion:        "2.86.10",
 		},
 	}

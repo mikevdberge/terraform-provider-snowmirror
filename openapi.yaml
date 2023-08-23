@@ -31,7 +31,7 @@ paths:
     post:
       summary: Update a SnowMirror setting
       description: Update a SnowMirror setting.
-      x-speakeasy-entity-operation: Setting#update
+      x-speakeasy-entity-operation: Setting#update,create
       operationId: updateSetting
       requestBody:
         description: A JSON representation of the setting to update

@@ -91,6 +91,7 @@ func (p *SnowmirrorProvider) Configure(ctx context.Context, req provider.Configu
 
 func (p *SnowmirrorProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewSettingResource,
 		NewSynchronizationResource,
 	}
 }
