@@ -38,21 +38,7 @@ func (p *SnowmirrorProvider) Metadata(ctx context.Context, req provider.Metadata
 func (p *SnowmirrorProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: `SnowMirror API: This document is a guide which will walk you through SnowMirror REST API. ` + "\n" +
-			`The purpose of the REST API is to allow developers to integrate SnowMirror with other applications.` + "\n" +
-			`` + "\n" +
-			`__Manage Synchonization__` + "\n" +
-			`` + "\n" +
-			`* Create a synchronization` + "\n" +
-			`* Update a synchronization` + "\n" +
-			`* Remove a synchronization` + "\n" +
-			`* Export a synchronization` + "\n" +
-			`* Import a synchronization` + "\n" +
-			`` + "\n" +
-			`The following resource collections are offered by this API:` + "\n" +
-			`* Synchonization` + "\n" +
-			`* SynchronizationAction` + "\n" +
-			`* SynchronizationExport` + "\n" +
-			`* SynchronizationImport`,
+			`The purpose of the REST API is to allow developers to integrate SnowMirror with other applications.`,
 		Attributes: map[string]schema.Attribute{
 			"server_url": schema.StringAttribute{
 				MarkdownDescription: "Server URL (defaults to http://localhost:9090)",

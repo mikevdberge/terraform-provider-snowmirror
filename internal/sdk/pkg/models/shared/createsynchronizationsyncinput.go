@@ -117,48 +117,6 @@ type CreateSynchronizationSyncInputFullLoadScheduler struct {
 	Type          *CreateSynchronizationSyncInputFullLoadSchedulerType          `json:"type,omitempty"`
 }
 
-type CreateSynchronizationSyncInputSchedulerDays string
-
-const (
-	CreateSynchronizationSyncInputSchedulerDaysMonday   CreateSynchronizationSyncInputSchedulerDays = "MONDAY"
-	CreateSynchronizationSyncInputSchedulerDaysTuesday  CreateSynchronizationSyncInputSchedulerDays = "TUESDAY"
-	CreateSynchronizationSyncInputSchedulerDaysWednesda CreateSynchronizationSyncInputSchedulerDays = "WEDNESDA"
-	CreateSynchronizationSyncInputSchedulerDaysThursday CreateSynchronizationSyncInputSchedulerDays = "THURSDAY"
-	CreateSynchronizationSyncInputSchedulerDaysFriday   CreateSynchronizationSyncInputSchedulerDays = "FRIDAY"
-	CreateSynchronizationSyncInputSchedulerDaysSaturday CreateSynchronizationSyncInputSchedulerDays = "SATURDAY"
-	CreateSynchronizationSyncInputSchedulerDaysSunday   CreateSynchronizationSyncInputSchedulerDays = "SUNDAY"
-)
-
-func (e CreateSynchronizationSyncInputSchedulerDays) ToPointer() *CreateSynchronizationSyncInputSchedulerDays {
-	return &e
-}
-
-func (e *CreateSynchronizationSyncInputSchedulerDays) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "MONDAY":
-		fallthrough
-	case "TUESDAY":
-		fallthrough
-	case "WEDNESDA":
-		fallthrough
-	case "THURSDAY":
-		fallthrough
-	case "FRIDAY":
-		fallthrough
-	case "SATURDAY":
-		fallthrough
-	case "SUNDAY":
-		*e = CreateSynchronizationSyncInputSchedulerDays(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateSynchronizationSyncInputSchedulerDays: %v", v)
-	}
-}
-
 // CreateSynchronizationSyncInputSchedulerType - Specifies when the incremental load synchronization will run
 type CreateSynchronizationSyncInputSchedulerType string
 
@@ -197,13 +155,9 @@ func (e *CreateSynchronizationSyncInputSchedulerType) UnmarshalJSON(data []byte)
 }
 
 type CreateSynchronizationSyncInputScheduler struct {
-	BeginDate            *string                                       `json:"beginDate,omitempty"`
-	Days                 []CreateSynchronizationSyncInputSchedulerDays `json:"days,omitempty"`
-	IncLoadExecutionType *string                                       `json:"incLoadExecutionType,omitempty"`
-	Time                 *string                                       `json:"time,omitempty"`
+	BeginDate *string `json:"beginDate,omitempty"`
 	// Specifies when the incremental load synchronization will run
-	Type    *CreateSynchronizationSyncInputSchedulerType `json:"type,omitempty"`
-	Visible *bool                                        `json:"visible,omitempty"`
+	Type *CreateSynchronizationSyncInputSchedulerType `json:"type,omitempty"`
 }
 
 type CreateSynchronizationSyncInputSchedulerPriority string
@@ -253,16 +207,14 @@ type CreateSynchronizationSyncInput struct {
 	// Enabled (true) - whenever a synchronization is executed, SnowMirror checks for schema changes in ServiceNow. Automatically adds, updates (data type, max. length of a column) and removes columns. If a new column is added SnowMirror clears the mirror table and downloads all records from scratch.
 	// Enabled (no truncation) (ENABLED_WITHOUT_TRUNCATION) - the same as Enabled option. It handles new columns differently, though. If a new column is added SnowMirror does not clear the mirror table. Instead, it creates the column and populates it with a default value (which is defined in ServiceNow).
 	//
-	AutoSchemaUpdate  *string                                          `json:"autoSchemaUpdate,omitempty"`
+	AutoSchemaUpdate  *bool                                            `json:"autoSchemaUpdate,omitempty"`
 	Columns           []CreateSynchronizationSyncInputColumns          `json:"columns,omitempty"`
 	ColumnsToExclude  []CreateSynchronizationSyncInputColumnsToExclude `json:"columnsToExclude,omitempty"`
 	DeleteStrategy    *CreateSynchronizationSyncInputDeleteStrategy    `json:"deleteStrategy,omitempty"`
 	EncodedQuery      *string                                          `json:"encodedQuery,omitempty"`
 	FullLoadScheduler *CreateSynchronizationSyncInputFullLoadScheduler `json:"fullLoadScheduler,omitempty"`
-	// Id of the synchronization.
-	ID *int64 `json:"id,omitempty"`
 	// Name of the table in mirror database where the data will be migrated.
-	MirrorTable *string `json:"mirrorTable,omitempty"`
+	MirrorTable string `json:"mirrorTable"`
 	// Display name of the synchronization.
 	Name string `json:"name"`
 	// Defines how to synchronize reference field types.

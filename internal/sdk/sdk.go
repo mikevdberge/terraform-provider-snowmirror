@@ -61,22 +61,10 @@ func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
 
 // Snowmirror - SnowMirror API: This document is a guide which will walk you through SnowMirror REST API.
 // The purpose of the REST API is to allow developers to integrate SnowMirror with other applications.
-//
-// __Manage Synchonization__
-//
-// * Create a synchronization
-// * Update a synchronization
-// * Remove a synchronization
-// * Export a synchronization
-// * Import a synchronization
-//
-// The following resource collections are offered by this API:
-// * Synchonization
-// * SynchronizationAction
-// * SynchronizationExport
-// * SynchronizationImport
 // https://www.snow-mirror.com/doc/RestApiGuide.html - The Speakeasy Platform Documentation
 type Snowmirror struct {
+	// Setting - Setting
+	Setting *setting
 	// Synchronization - Synchronization
 	// https://www.snow-mirror.com/doc/RestApiGuide.html#section-api-sync
 	Synchronization *synchronization
@@ -136,7 +124,7 @@ func New(opts ...SDKOption) *Snowmirror {
 			Language:          "terraform",
 			OpenAPIDocVersion: "5.1.13",
 			SDKVersion:        "0.1.1",
-			GenVersion:        "2.86.4",
+			GenVersion:        "2.86.10",
 		},
 	}
 	for _, opt := range opts {
@@ -154,6 +142,8 @@ func New(opts ...SDKOption) *Snowmirror {
 			sdk.sdkConfiguration.SecurityClient = sdk.sdkConfiguration.DefaultClient
 		}
 	}
+
+	sdk.Setting = newSetting(sdk.sdkConfiguration)
 
 	sdk.Synchronization = newSynchronization(sdk.sdkConfiguration)
 

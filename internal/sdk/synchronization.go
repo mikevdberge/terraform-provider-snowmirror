@@ -93,75 +93,6 @@ func (s *synchronization) CreateSynchronization(ctx context.Context, request sha
 	return res, nil
 }
 
-// CreateSynchronizationAction - Create Synchronization actions
-// Performs an action on the selected synchronizations.
-// API ignores synchronizations which are already running. It also ignores synchronizations which are deactivated.
-// Available actions are "SYNCHRONIZE", "CLEAN_AND_SYNCHRONIZE", "DIFFERENTIAL_SYNCHRONIZATION", "STOP"
-func (s *synchronization) CreateSynchronizationAction(ctx context.Context, request shared.CreateSynchronizationActionInput) (*operations.CreateSynchronizationActionResponse, error) {
-	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url := strings.TrimSuffix(baseURL, "/") + "/api/v1/synchronization/action"
-
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
-	if err != nil {
-		return nil, fmt.Errorf("error serializing request body: %w", err)
-	}
-	if bodyReader == nil {
-		return nil, fmt.Errorf("request body is required")
-	}
-
-	debugBody := bytes.NewBuffer([]byte{})
-	debugReader := io.TeeReader(bodyReader, debugBody)
-
-	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("user-agent", fmt.Sprintf("speakeasy-sdk/%s %s %s %s", s.sdkConfiguration.Language, s.sdkConfiguration.SDKVersion, s.sdkConfiguration.GenVersion, s.sdkConfiguration.OpenAPIDocVersion))
-
-	req.Header.Set("Content-Type", reqContentType)
-
-	client := s.sdkConfiguration.SecurityClient
-
-	httpRes, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
-	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
-	}
-
-	rawBody, err := io.ReadAll(httpRes.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %w", err)
-	}
-	httpRes.Request.Body = io.NopCloser(debugBody)
-	httpRes.Body.Close()
-	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
-
-	contentType := httpRes.Header.Get("Content-Type")
-
-	res := &operations.CreateSynchronizationActionResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: contentType,
-		RawResponse: httpRes,
-	}
-	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(contentType, `application/json`):
-			var out *shared.Synchronization
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
-				return res, err
-			}
-
-			res.Synchronization = out
-		}
-	}
-
-	return res, nil
-}
-
 // DeleteSynchronization - Delete a sync
 // Delete a synchronizations.
 func (s *synchronization) DeleteSynchronization(ctx context.Context, request operations.DeleteSynchronizationRequest) (*operations.DeleteSynchronizationResponse, error) {
@@ -306,12 +237,12 @@ func (s *synchronization) GetSynchronizationAction(ctx context.Context) (*operat
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out []shared.Action
+			var out *operations.GetSynchronizationAction200ApplicationJSON
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
 				return res, err
 			}
 
-			res.Actions = out
+			res.GetSynchronizationAction200ApplicationJSONObject = out
 		}
 	}
 
@@ -485,7 +416,7 @@ func (s *synchronization) UpdateSynchronization(ctx context.Context, request ope
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "CreateSynchronizationUpdate", "json")
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "CreateSynchronizationInput", "json")
 	if err != nil {
 		return nil, fmt.Errorf("error serializing request body: %w", err)
 	}

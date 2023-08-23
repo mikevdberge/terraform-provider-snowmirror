@@ -4,10 +4,8 @@ package provider
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
-type SyncronizationSyncOutputFullLoadScheduler struct {
+type CreateSynchronizationSyncInputFullLoadScheduler struct {
 	BeginDate     types.String `tfsdk:"begin_date"`
 	ExecutionType types.String `tfsdk:"execution_type"`
-	Time          types.String `tfsdk:"time"`
 	Type          types.String `tfsdk:"type"`
-	Visible       types.Bool   `tfsdk:"visible"`
 }

@@ -1,7 +1,7 @@
 resource "snowmirror_synchronization" "my_synchronization" {
   active                  = true
   allow_inherited_columns = false
-  auto_schema_update      = "true"
+  auto_schema_update      = true
   columns = [
     {
       name = "sys_id"
@@ -12,31 +12,22 @@ resource "snowmirror_synchronization" "my_synchronization" {
       name = "sys_created_by"
     },
   ]
-  delete_strategy = "TRUNCATE"
+  delete_strategy = "AUDIT"
   encoded_query   = ""
   full_load_scheduler = {
     begin_date     = "2014-08-07"
     execution_type = "CLEAN_AND_SYNCHRONIZE"
-    time           = "...my_time..."
     type           = "MANUALLY"
-    visible        = true
   }
-  id                   = 9
   mirror_table         = "incident"
   name                 = "incident"
   reference_field_type = "...my_reference_field_type..."
   run_immediately      = false
   scheduler = {
-    begin_date = "2023-08-11"
-    days = [
-      "SATURDAY",
-    ]
-    inc_load_execution_type = "...my_inc_load_execution_type..."
-    time                    = "02:00"
-    type                    = "MANUALLY"
-    visible                 = false
+    begin_date = "2014-08-07"
+    type       = "MANUALLY"
   }
-  scheduler_priority = "HIGH"
+  scheduler_priority = "NORMAL"
   table              = "incident"
   view               = "...my_view..."
 }

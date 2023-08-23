@@ -4,13 +4,17 @@ package operations
 
 import (
 	"net/http"
-	"snowmirror/internal/sdk/pkg/models/shared"
 )
 
+// GetSynchronizationAction200ApplicationJSON - OK
+type GetSynchronizationAction200ApplicationJSON struct {
+	Actions []string `json:"actions,omitempty"`
+}
+
 type GetSynchronizationActionResponse struct {
-	// OK
-	Actions     []shared.Action
 	ContentType string
 	StatusCode  int
 	RawResponse *http.Response
+	// OK
+	GetSynchronizationAction200ApplicationJSONObject *GetSynchronizationAction200ApplicationJSON
 }

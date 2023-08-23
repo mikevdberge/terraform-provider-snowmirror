@@ -2,7 +2,7 @@
 
 package shared
 
-// Synchronization - A Synchonization object
-type Synchronization struct {
+// CreateSettingInput - A Settings object
+type CreateSettingInput struct {
 	Sync SyncronizationSyncOutput `json:"sync"`
 }
