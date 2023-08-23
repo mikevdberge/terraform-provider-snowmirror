@@ -25,9 +25,9 @@ func newSetting(sdkConfig sdkConfiguration) *setting {
 	}
 }
 
-// CreateSetting - Update a SnowMirror setting
-// Creates a new synchronization. Returns newly created synchronization including its ID.
-func (s *setting) CreateSetting(ctx context.Context, request shared.CreateSettingInput) (*operations.CreateSettingResponse, error) {
+// UpdateSetting - Update a SnowMirror setting
+// Update a SnowMirror setting.
+func (s *setting) UpdateSetting(ctx context.Context, request shared.CreateSettingInput) (*operations.UpdateSettingResponse, error) {
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
 	url := strings.TrimSuffix(baseURL, "/") + "/api/v1/setting"
 
@@ -71,7 +71,7 @@ func (s *setting) CreateSetting(ctx context.Context, request shared.CreateSettin
 
 	contentType := httpRes.Header.Get("Content-Type")
 
-	res := &operations.CreateSettingResponse{
+	res := &operations.UpdateSettingResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 		RawResponse: httpRes,

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type CreateSettingResponse struct {
+type UpdateSettingResponse struct {
 	ContentType string
 	StatusCode  int
 	RawResponse *http.Response

@@ -30,9 +30,9 @@ paths:
   /api/v1/setting:
     post:
       summary: Update a SnowMirror setting
-      description: Creates a new synchronization. Returns newly created synchronization including its ID.
+      description: Update a SnowMirror setting.
       x-speakeasy-entity-operation: Setting#update
-      operationId: createSetting
+      operationId: updateSetting
       requestBody:
         description: A JSON representation of the setting to update
         content:
@@ -389,7 +389,7 @@ components:
         id: b02cbc78ee913
     CreateSettingInput:
       description: A Settings object
-      x-speakeasy-entity: Settng
+      x-speakeasy-entity: Setting
       type: object
       properties:
         sync:
