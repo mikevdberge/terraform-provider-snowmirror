@@ -7,21 +7,14 @@ import (
 )
 
 func (r *SettingResourceModel) ToCreateSDKType() *shared.CreateSettingInput {
-	id := r.Sync.ID.ValueInt64()
-	name := r.Sync.Name.ValueString()
-	table := new(string)
-	if !r.Sync.Table.IsUnknown() && !r.Sync.Table.IsNull() {
-		*table = r.Sync.Table.ValueString()
+	options := new(string)
+	if !r.Options.IsUnknown() && !r.Options.IsNull() {
+		*options = r.Options.ValueString()
 	} else {
-		table = nil
-	}
-	sync := shared.SyncronizationSyncOutput{
-		ID:    id,
-		Name:  name,
-		Table: table,
+		options = nil
 	}
 	out := shared.CreateSettingInput{
-		Sync: sync,
+		Options: options,
 	}
 	return &out
 }

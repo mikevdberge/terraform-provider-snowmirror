@@ -31,7 +31,7 @@ paths:
     post:
       summary: Update a SnowMirror setting
       description: Update a SnowMirror setting.
-      x-speakeasy-entity-operation: Setting#update,create
+      x-speakeasy-entity-operation: 'Setting#update,create'
       operationId: updateSetting
       requestBody:
         description: A JSON representation of the setting to update
@@ -278,11 +278,11 @@ components:
         autoSchemaUpdate:
           type: boolean
           description: |
-                Configures how to check for schema changes in ServiceNow.
+            Configures how to check for schema changes in ServiceNow.
 
-                Enabled (true) - whenever a synchronization is executed, SnowMirror checks for schema changes in ServiceNow. Automatically adds, updates (data type, max. length of a column) and removes columns. If a new column is added SnowMirror clears the mirror table and downloads all records from scratch.
-                Enabled (no truncation) (ENABLED_WITHOUT_TRUNCATION) - the same as Enabled option. It handles new columns differently, though. If a new column is added SnowMirror does not clear the mirror table. Instead, it creates the column and populates it with a default value (which is defined in ServiceNow).
-          example: true                
+            Enabled (true) - whenever a synchronization is executed, SnowMirror checks for schema changes in ServiceNow. Automatically adds, updates (data type, max. length of a column) and removes columns. If a new column is added SnowMirror clears the mirror table and downloads all records from scratch.
+            Enabled (no truncation) (ENABLED_WITHOUT_TRUNCATION) - the same as Enabled option. It handles new columns differently, though. If a new column is added SnowMirror does not clear the mirror table. Instead, it creates the column and populates it with a default value (which is defined in ServiceNow).
+          example: true
         encodedQuery:
           type: string
           example: ''
@@ -293,16 +293,16 @@ components:
             - TRUNCATE
             - DIFF
             - NONE
-          example: AUDIT          
+          example: AUDIT
         active:
           type: boolean
           description: |-
-                true - synchronization is active and can be scheduled to synchronize data from ServiceNow
-                false - synchronization is deactivated and cannot be scheduled to synchronize data from ServiceNowNow          
-          example: true                
+            true - synchronization is active and can be scheduled to synchronize data from ServiceNow
+            false - synchronization is deactivated and cannot be scheduled to synchronize data from ServiceNowNow          
+          example: true
         runImmediately:
           type: boolean
-          description: Determines whether initial synchronization should be done          
+          description: Determines whether initial synchronization should be done
           example: false
         scheduler:
           type: object
@@ -316,7 +316,7 @@ components:
                 - WEEKLY
                 - PERIODICALLY
                 - CRON
-              example: MANUALLY              
+              example: MANUALLY
             beginDate:
               type: string
               example: '2014-08-07'
@@ -388,14 +388,17 @@ components:
       x-stoplight:
         id: b02cbc78ee913
     CreateSettingInput:
-      description: A Settings object
+      description: Object used for creating and updating SnowMirror Settings
       x-speakeasy-entity: Setting
       type: object
+      x-examples:
+        Example 1:
+          options:
+            snowMirror.activityLog.debugLog: 'false'
+            snowMirror.activityLog.traceLog: 'false'
       properties:
-        sync:
-          $ref: '#/components/schemas/SyncronizationSyncOutput'
-      required:
-        - sync   
+        options:
+          type: string
   securitySchemes:
     basic-authentication:
       type: http

@@ -2,7 +2,7 @@
 
 package shared
 
-// CreateSettingInput - A Settings object
+// CreateSettingInput - Object used for creating and updating SnowMirror Settings
 type CreateSettingInput struct {
-	Sync SyncronizationSyncOutput `json:"sync"`
+	Options *string `json:"options,omitempty"`
 }

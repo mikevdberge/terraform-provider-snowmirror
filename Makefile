@@ -4,10 +4,8 @@ all: speakeasy docs
 docs:
 	go generate ./...
 
-openapi.yaml:
-	curl https://raw.githubusercontent.com/mikevdberge/snowmirror-api/main/reference/snowmirror-api.yaml > openapi.yaml
-
-speakeasy: check-speakeasy openapi.yaml
+speakeasy: check-speakeasy
+	@curl https://raw.githubusercontent.com/mikevdberge/snowmirror-api/main/reference/snowmirror-api.yaml > openapi.yaml
 	speakeasy generate sdk --lang terraform -o . -s openapi.yaml
 
 check-speakeasy:

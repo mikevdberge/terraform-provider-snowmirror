@@ -1,7 +1,6 @@
 internal/sdk/setting.go
 internal/sdk/synchronization.go
 internal/sdk/sdk.go
-internal/provider/type_syncronization_sync_output.go
 internal/provider/type_create_synchronization_sync_input_columns.go
 internal/provider/type_create_synchronization_sync_input_full_load_scheduler.go
 internal/provider/type_create_synchronization_sync_input_scheduler.go
@@ -62,8 +61,8 @@ internal/sdk/pkg/models/operations/getsynchronizationimport.go
 internal/sdk/pkg/models/operations/postsynchronizationimport.go
 internal/sdk/pkg/models/operations/updatesynchronization.go
 internal/sdk/pkg/models/shared/createsettinginput.go
-internal/sdk/pkg/models/shared/syncronizationsyncoutput.go
 internal/sdk/pkg/models/shared/synchronization.go
+internal/sdk/pkg/models/shared/syncronizationsyncoutput.go
 internal/sdk/pkg/models/shared/createsynchronizationinput.go
 internal/sdk/pkg/models/shared/createsynchronizationsyncinput.go
 internal/sdk/pkg/models/shared/security.go

@@ -28,7 +28,7 @@ type SettingResource struct {
 
 // SettingResourceModel describes the resource data model.
 type SettingResourceModel struct {
-	Sync SyncronizationSyncOutput `tfsdk:"sync"`
+	Options types.String `tfsdk:"options"`
 }
 
 func (r *SettingResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -40,22 +40,8 @@ func (r *SettingResource) Schema(ctx context.Context, req resource.SchemaRequest
 		MarkdownDescription: "Setting Resource",
 
 		Attributes: map[string]schema.Attribute{
-			"sync": schema.SingleNestedAttribute{
-				Required: true,
-				Attributes: map[string]schema.Attribute{
-					"id": schema.Int64Attribute{
-						Required:    true,
-						Description: `Sync ID`,
-					},
-					"name": schema.StringAttribute{
-						Required:    true,
-						Description: `Display name of the synchronization.`,
-					},
-					"table": schema.StringAttribute{
-						Optional:    true,
-						Description: `Name of the table in ServiceNow.`,
-					},
-				},
+			"options": schema.StringAttribute{
+				Optional: true,
 			},
 		},
 	}
