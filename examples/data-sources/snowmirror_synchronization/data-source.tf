@@ -19,7 +19,7 @@ data "snowmirror_synchronization" "my_synchronization" {
     execution_type = "CLEAN_AND_SYNCHRONIZE"
     type           = "MANUALLY"
   }
-  id                   = 9
+  id                   = 10
   mirror_table         = "incident"
   reference_field_type = "...my_reference_field_type..."
   run_immediately      = false

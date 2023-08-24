@@ -27,7 +27,7 @@ tags:
   - name: Setting
     description: Setting
 paths:
-  /api/v1/setting:
+  /api/v1/settings:
     post:
       summary: Update a SnowMirror setting
       description: Update a SnowMirror setting.
@@ -45,6 +45,7 @@ paths:
           description: OK
       tags:
         - Setting
+    parameters: []
   /api/v1/synchronization:
     post:
       summary: Create a synchronization
@@ -391,14 +392,27 @@ components:
       description: Object used for creating and updating SnowMirror Settings
       x-speakeasy-entity: Setting
       type: object
-      x-examples:
-        Example 1:
-          options:
-            snowMirror.activityLog.debugLog: 'false'
-            snowMirror.activityLog.traceLog: 'false'
       properties:
         options:
-          type: string
+          type: object
+          additionalProperties:
+            type: string
+        type: string
+    Setting:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          value:
+            type: string
+      x-examples:
+        Example 1:
+          - id: snowmirror
+            value: 'false'
+          - id: snowmirror
+            value: 'false'
   securitySchemes:
     basic-authentication:
       type: http

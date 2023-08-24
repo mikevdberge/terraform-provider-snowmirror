@@ -1,3 +1,7 @@
 resource "snowmirror_setting" "my_setting" {
-  options = "...my_options..."
+  options = {
+    "corrupti"  = "..."
+    "provident" = "..."
+  }
+  type = "{ \"see\": \"documentation\" }"
 }

@@ -17,9 +17,6 @@ terraform {
 
 provider "snowmirror" {
   # Configuration options
-  server_url = "http://localhost:9090"
-  username   = myusername
-  password   = mypassword
 }
 ```
 <!-- End SDK Installation -->

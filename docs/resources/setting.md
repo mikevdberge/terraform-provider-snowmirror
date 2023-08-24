@@ -14,7 +14,11 @@ Setting Resource
 
 ```terraform
 resource "snowmirror_setting" "my_setting" {
-  options = "...my_options..."
+  options = {
+    "corrupti"  = "..."
+    "provident" = "..."
+  }
+  type = "{ \"see\": \"documentation\" }"
 }
 ```
 
@@ -23,6 +27,7 @@ resource "snowmirror_setting" "my_setting" {
 
 ### Optional
 
-- `options` (String)
+- `options` (Map of String)
+- `type` (String) Parsed as JSON.
 
 

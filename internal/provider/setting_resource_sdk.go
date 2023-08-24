@@ -3,18 +3,23 @@
 package provider
 
 import (
+	"encoding/json"
 	"snowmirror/internal/sdk/pkg/models/shared"
 )
 
 func (r *SettingResourceModel) ToCreateSDKType() *shared.CreateSettingInput {
-	options := new(string)
-	if !r.Options.IsUnknown() && !r.Options.IsNull() {
-		*options = r.Options.ValueString()
-	} else {
-		options = nil
+	options := make(map[string]string)
+	for optionsKey, optionsValue := range r.Options {
+		optionsInst := optionsValue.ValueString()
+		options[optionsKey] = optionsInst
+	}
+	var typeVar interface{}
+	if !r.Type.IsUnknown() && !r.Type.IsNull() {
+		_ = json.Unmarshal([]byte(r.Type.ValueString()), &typeVar)
 	}
 	out := shared.CreateSettingInput{
 		Options: options,
+		Type:    typeVar,
 	}
 	return &out
 }

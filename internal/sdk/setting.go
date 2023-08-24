@@ -29,7 +29,7 @@ func newSetting(sdkConfig sdkConfiguration) *setting {
 // Update a SnowMirror setting.
 func (s *setting) UpdateSetting(ctx context.Context, request shared.CreateSettingInput) (*operations.UpdateSettingResponse, error) {
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url := strings.TrimSuffix(baseURL, "/") + "/api/v1/setting"
+	url := strings.TrimSuffix(baseURL, "/") + "/api/v1/settings"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "Request", "json")
 	if err != nil {

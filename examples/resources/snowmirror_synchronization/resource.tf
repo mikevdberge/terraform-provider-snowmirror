@@ -1,6 +1,6 @@
 resource "snowmirror_synchronization" "my_synchronization" {
   active                  = true
-  allow_inherited_columns = false
+  allow_inherited_columns = true
   auto_schema_update      = true
   columns = [
     {

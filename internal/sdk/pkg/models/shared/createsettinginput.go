@@ -4,5 +4,6 @@ package shared
 
 // CreateSettingInput - Object used for creating and updating SnowMirror Settings
 type CreateSettingInput struct {
-	Options *string `json:"options,omitempty"`
+	Options map[string]string `json:"options,omitempty"`
+	Type    interface{}       `json:"type,omitempty"`
 }

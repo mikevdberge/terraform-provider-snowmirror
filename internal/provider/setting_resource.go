@@ -9,8 +9,10 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"snowmirror/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -28,7 +30,8 @@ type SettingResource struct {
 
 // SettingResourceModel describes the resource data model.
 type SettingResourceModel struct {
-	Options types.String `tfsdk:"options"`
+	Options map[string]types.String `tfsdk:"options"`
+	Type    types.String            `tfsdk:"type"`
 }
 
 func (r *SettingResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -40,8 +43,16 @@ func (r *SettingResource) Schema(ctx context.Context, req resource.SchemaRequest
 		MarkdownDescription: "Setting Resource",
 
 		Attributes: map[string]schema.Attribute{
-			"options": schema.StringAttribute{
+			"options": schema.MapAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+			},
+			"type": schema.StringAttribute{
 				Optional: true,
+				Validators: []validator.String{
+					validators.IsValidJSON(),
+				},
+				Description: `Parsed as JSON.`,
 			},
 		},
 	}
